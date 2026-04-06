@@ -21,7 +21,7 @@ function trackEvent(eventName, properties) {
 
 function identifyUser(email, attributes) {
   waitForBird(bird => {
-    bird.contact.identify({ strategy: 'visitor', identifier: { key: 'emailaddress', value: email } }, attributes || {});
+    bird.contact.identify({ strategy: 'Visitor', identifier: { key: 'emailaddress', value: email } }, attributes || {});
     console.log('[Bird SDK] identify', email, attributes || {});
   });
 }
