@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Scoops & Co.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo"><span>&#127846;</span> Scoops &amp; Co.</a>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="cart.html" class="cart-link">Cart <span class="cart-count"></span></a></li>
+        <li><a href="login.html" class="auth-link active">Sign In</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <h2>Welcome Back</h2>
+      <p class="auth-subtitle">Sign in or create an account to continue.</p>
+
+      <div class="auth-tabs">
+        <button class="active" onclick="switchTab('login')">Sign In</button>
+        <button onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- Login Form -->
+      <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; text-align: center;">Sign In</button>
+      </form>
+
+      <!-- Register Form -->
+      <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="reg-first">First Name</label>
+            <input type="text" id="reg-first" required placeholder="Jane">
+          </div>
+          <div class="form-group">
+            <label for="reg-last">Last Name</label>
+            <input type="text" id="reg-last" required placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" required placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" required placeholder="Create a password" minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; text-align: center;">Create Account</button>
+      </form>
+
+      <!-- Success State -->
+      <div class="auth-success" id="auth-success">
+        <div class="success-icon">&#127846;</div>
+        <h3 id="success-heading">Welcome!</h3>
+        <p id="success-message">You're all set.</p>
+        <a href="shop.html" class="btn btn-primary">Start Shopping</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Account</a></li>
+    </ul>
+    <p>&copy; 2026 Scoops &amp; Co. All rights reserved. A demo site.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/tracking.js"></script>
+  <script
+    src="https://embeddables.p.mbirdcdn.net/sdk/v0/bird-sdk.js"
+    data-config-url="https://api.bird.com/workspaces/d9823d98-f98b-4c95-9e71-d9640c620d65/applications/c8b2d279-bd80-4b46-a5a7-1e5964c34867/signature/2024-06-17T17-12-51_27fb6117c2"
+  ></script>
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tabs button').forEach((btn, i) => {
+        btn.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
+      });
+      document.getElementById('login-form').classList.toggle('active', tab === 'login');
+      document.getElementById('register-form').classList.toggle('active', tab === 'register');
+    }
+
+    function showSuccess(heading, message, user) {
+      setUser(user);
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'none';
+      document.querySelector('.auth-tabs').style.display = 'none';
+      document.getElementById('success-heading').textContent = heading;
+      document.getElementById('success-message').textContent = message;
+      document.getElementById('auth-success').style.display = 'block';
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      showSuccess(
+        'Welcome back!',
+        `Signed in as ${email}`,
+        { email }
+      );
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const first = document.getElementById('reg-first').value;
+      const last = document.getElementById('reg-last').value;
+      const email = document.getElementById('reg-email').value;
+      showSuccess(
+        `Welcome, ${first}!`,
+        'Your account has been created.',
+        { email, firstName: first, lastName: last }
+      );
+    }
+
+    // If already logged in, redirect
+    if (getUser()) {
+      window.location.href = 'shop.html';
+    }
+  </script>
+</body>
+</html>

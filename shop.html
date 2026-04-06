@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Scoops & Co.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo"><span>&#127846;</span> Scoops &amp; Co.</a>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html" class="active">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="cart.html" class="cart-link">Cart <span class="cart-count"></span></a></li>
+        <li><a href="login.html" class="auth-link">Sign In</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">Our Flavors</h2>
+    <p class="section-subtitle">Eight handcrafted flavors, each one made from scratch.</p>
+    <div class="product-grid" id="all-products"></div>
+  </section>
+
+  <footer>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Account</a></li>
+    </ul>
+    <p>&copy; 2026 Scoops &amp; Co. All rights reserved. A demo site.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/tracking.js"></script>
+  <script
+    src="https://embeddables.p.mbirdcdn.net/sdk/v0/bird-sdk.js"
+    data-config-url="https://api.bird.com/workspaces/d9823d98-f98b-4c95-9e71-d9640c620d65/applications/c8b2d279-bd80-4b46-a5a7-1e5964c34867/signature/2024-06-17T17-12-51_27fb6117c2"
+  ></script>
+  <script>
+    document.getElementById('all-products').innerHTML = PRODUCTS.map(productCardHTML).join('');
+  </script>
+</body>
+</html>

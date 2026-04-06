@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Scoops & Co.</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo"><span>&#127846;</span> Scoops &amp; Co.</a>
+      <button class="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="cart.html" class="cart-link">Cart <span class="cart-count"></span></a></li>
+        <li><a href="login.html" class="auth-link">Sign In</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="section">
+    <h2 class="section-title">Checkout</h2>
+    <p class="section-subtitle">Almost there! Fill in your details below.</p>
+
+    <div id="checkout-content"></div>
+
+    <div id="order-success" style="display: none; text-align: center; padding: 3rem 0;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">&#127881;</div>
+      <h2 style="color: var(--brown); margin-bottom: 0.5rem;">Order Placed!</h2>
+      <p style="color: var(--text-light); margin-bottom: 1.5rem;">Thanks for your order. Your ice cream is on its way! (Not really, this is a demo.)</p>
+      <a href="shop.html" class="btn btn-primary">Keep Shopping</a>
+    </div>
+  </section>
+
+  <footer>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Account</a></li>
+    </ul>
+    <p>&copy; 2026 Scoops &amp; Co. All rights reserved. A demo site.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/tracking.js"></script>
+  <script
+    src="https://embeddables.p.mbirdcdn.net/sdk/v0/bird-sdk.js"
+    data-config-url="https://api.bird.com/workspaces/d9823d98-f98b-4c95-9e71-d9640c620d65/applications/c8b2d279-bd80-4b46-a5a7-1e5964c34867/signature/2024-06-17T17-12-51_27fb6117c2"
+  ></script>
+  <script>
+    function renderCheckout() {
+      const cart = getCart();
+      const container = document.getElementById('checkout-content');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty">
+            <div class="empty-icon">&#128722;</div>
+            <h3>Nothing to check out</h3>
+            <p>Add some ice cream first!</p>
+            <a href="shop.html" class="btn btn-primary" style="margin-top: 1rem;">Browse Flavors</a>
+          </div>
+        `;
+        return;
+      }
+
+      const subtotal = getCartTotal();
+      const tax = subtotal * 0.08;
+      const shipping = 4.99;
+      const total = subtotal + tax + shipping;
+
+      const orderItems = cart.map(item =>
+        `<div class="summary-row"><span>${item.emoji} ${item.name} x${item.qty}</span><span>$${(item.price * item.qty).toFixed(2)}</span></div>`
+      ).join('');
+
+      container.innerHTML = `
+        <div class="checkout-grid">
+          <div>
+            <h3 style="color: var(--brown); margin-bottom: 1rem;">Shipping Information</h3>
+            <form id="checkout-form" onsubmit="placeOrder(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="first-name">First Name</label>
+                  <input type="text" id="first-name" required placeholder="Jane">
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Last Name</label>
+                  <input type="text" id="last-name" required placeholder="Doe">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="jane@example.com">
+              </div>
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" required placeholder="123 Waffle Cone Lane">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input type="text" id="city" required placeholder="Creamville">
+                </div>
+                <div class="form-group">
+                  <label for="zip">ZIP Code</label>
+                  <input type="text" id="zip" required placeholder="12345">
+                </div>
+              </div>
+
+              <h3 style="color: var(--brown); margin: 1.5rem 0 1rem;">Payment</h3>
+              <div class="form-group">
+                <label for="card">Card Number</label>
+                <input type="text" id="card" required placeholder="4242 4242 4242 4242" maxlength="19">
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="expiry">Expiry</label>
+                  <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
+                </div>
+                <div class="form-group">
+                  <label for="cvv">CVV</label>
+                  <input type="text" id="cvv" required placeholder="123" maxlength="4">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 0.5rem;">Place Order - $${total.toFixed(2)}</button>
+            </form>
+          </div>
+
+          <div>
+            <div class="cart-summary">
+              <h3 style="color: var(--brown); margin-bottom: 1rem;">Order Summary</h3>
+              ${orderItems}
+              <div class="summary-row" style="margin-top: 0.8rem;"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+              <div class="summary-row"><span>Tax (8%)</span><span>$${tax.toFixed(2)}</span></div>
+              <div class="summary-row"><span>Shipping</span><span>$${shipping.toFixed(2)}</span></div>
+              <div class="summary-row total"><span>Total</span><span>$${total.toFixed(2)}</span></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function placeOrder(e) {
+      e.preventDefault();
+      clearCart();
+      document.getElementById('checkout-content').style.display = 'none';
+      document.getElementById('order-success').style.display = 'block';
+    }
+
+    renderCheckout();
+  </script>
+</body>
+</html>
